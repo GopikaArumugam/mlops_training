@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Driver Intelligent System</title>
+  <meta name="description" content="A premium, luxury-grade electric vehicle safety cockpit designed with clean, minimalist aesthetics, tracking driver biometrics and cognitive focus.">
+  <!-- Clean Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Premium Subtle Background Glares -->
+  <div class="luxury-ambient-bg"></div>
+
+  <!-- ==================== LUXURY PRE-FLIGHT CHECK-IN ==================== -->
+  <div id="checkin-panel" class="checkin-overlay">
+    <div class="checkin-card glass-card">
+      <div class="checkin-header">
+        <span class="system-tag">AI DRIVER INTELLIGENT SYSTEM</span>
+        <h1>Welcome, Driver</h1>
+        <p class="subtitle">How are you feeling before you start driving?</p>
+      </div>
+
+      <div class="checkin-body">
+        <div class="ai-greeting-box">
+          <div class="ai-orb-visual">
+            <div class="orb-layer layer-1"></div>
+            <div class="orb-layer layer-2"></div>
+          </div>
+          <div class="ai-message font-sora">
+            "Hello. I am the AI Driver Intelligent System. I am calibrating your active safe-drive mechanics. Let's do a quick pre-flight check."
+          </div>
+        </div>
+
+        <form id="checkin-form" onsubmit="submitCheckin(event)">
+          <div class="input-container">
+            <label for="feelings-input">How are you feeling right now?</label>
+            <div class="input-row">
+              <input type="text" id="feelings-input" placeholder="Describe your state (e.g. 'Feeling relaxed' or 'A bit tired')..." autocomplete="off" required>
+              <button type="submit" class="btn-primary">
+                <span>Start Dashboard</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <div class="quick-checkin-section">
+          <p class="section-label">Quick check-in options:</p>
+          <div class="quick-pills">
+            <button class="pill-btn state-fine" onclick="quickCheckin('fine', 'Feeling fine')">
+              <span class="dot"></span> Calm & Focused
+            </button>
+            <button class="pill-btn state-stressed" onclick="quickCheckin('stressed', 'A bit stressed')">
+              <span class="dot"></span> Feeling Stressed
+            </button>
+            <button class="pill-btn state-tired" onclick="quickCheckin('tired', 'Feeling sleepy')">
+              <span class="dot"></span> Drowsy / Tired
+            </button>
+            <button class="pill-btn state-angry" onclick="quickCheckin('angry', 'Feeling agitated')">
+              <span class="dot"></span> Agitated / Hurried
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PREMIUM COCKPIT DASHBOARD ==================== -->
+  <div id="cockpit-container" class="cockpit-wrapper hidden">
+    
+    <!-- MINIMALIST VEHICLE HEADER -->
+    <header class="cockpit-header">
+      <div class="brand-section">
+        <div class="brand-name">ADIS <span>INTELLIGENT SYSTEM</span></div>
+        <div class="status-indicator">
+          <span class="status-pulse-dot"></span>
+          <span class="status-label">Active Monitoring</span>
+        </div>
+      </div>
+      
+      <div class="ticker-news">
+        <span class="label">Status:</span>
+        <span class="content" id="header-ticker">Driver tracking active. Connection stable.</span>
+      </div>
+
+      <div class="header-readouts">
+        <div class="readout-block">
+          <span class="lbl">Speed</span>
+          <span class="val" id="hud-speed">72</span> <span class="unit">mph</span>
+        </div>
+        <div class="readout-block">
+          <span class="lbl">Engine Temp</span>
+          <span class="val" id="hud-temp">41°C</span>
+        </div>
+        <div class="readout-block clock">
+          <span class="val" id="hud-time">14:26:39</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TRIPLE SLATE PANEL GRID -->
+    <main class="cockpit-grid">
+      
+      <!-- ==================== LEFT PANEL: DRIVER BIOMETRICS ==================== -->
+      <section class="panel-card vision-panel glass-card" id="panel-vision">
+        <div class="panel-header">
+          <div class="panel-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+          <h3>Driver Face Analysis</h3>
+          <span class="panel-badge-status">Live Feed</span>
+        </div>
+
+        <div class="panel-body">
+          <div class="camera-simulation-container">
+            <canvas id="canvas-face-mesh"></canvas>
+            <div class="camera-decorations">
+              <span class="cam-indicator"><span class="active-dot"></span>Camera Stream</span>
+              <span class="fps-indicator">60 fps</span>
+            </div>
+          </div>
+
+          <div class="biometric-metrics-list">
+            <div class="biometric-row glass-card">
+              <div class="row-details">
+                <span class="label">Blink Rate</span>
+                <span class="val" id="metric-blink">14 <small>bpm</small></span>
+              </div>
+              <div class="row-progress-container">
+                <div class="row-progress-fill fill-normal" id="fill-blink" style="width: 50%"></div>
+              </div>
+              <span class="row-sub">Normal: 12-18 bpm</span>
+            </div>
+
+            <div class="biometric-row glass-card">
+              <div class="row-details">
+                <span class="label">Yawn / Sleep Alert</span>
+                <span class="val" id="metric-yawn">Nominal</span>
+              </div>
+              <div class="row-progress-container">
+                <div class="row-progress-fill fill-normal" id="fill-yawn" style="width: 10%"></div>
+              </div>
+              <span class="row-sub">Sleep status: Normal</span>
+            </div>
+
+            <div class="biometric-row glass-card">
+              <div class="row-details">
+                <span class="label">Driver Mood</span>
+                <span class="val state-calm" id="metric-emotion">Focused</span>
+              </div>
+              <div class="row-progress-container">
+                <div class="row-progress-fill fill-normal" id="fill-emotion" style="width: 80%"></div>
+              </div>
+              <span class="row-sub">Driver focus: Confirmed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CENTER PANEL: HERO RISK GAUGE ==================== -->
+      <section class="panel-card hero-panel glass-card" id="panel-risk">
+        <div class="panel-header">
+          <div class="panel-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3>Attention Analyzer</h3>
+          <span class="panel-badge-status status-safe" id="engine-status-tag">System Active</span>
+        </div>
+
+        <div class="panel-body main-hero-section">
+          
+          <!-- HERO ACTIVE STATUS DISPLAY -->
+          <div class="active-status-hero-card state-safe-bg" id="status-hero-card">
+            <span class="status-hero-label">Driver Attention Status</span>
+            <h2 class="status-hero-value" id="status-hero-text">STATUS: SAFE & FOCUSED</h2>
+          </div>
+          
+          <div class="hero-gauge-wrapper">
+            <div class="gauge-ambient-glow" id="gauge-glow"></div>
+            
+            <svg class="luxury-gauge-svg" viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="grad-safe" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0284c7" />
+                  <stop offset="100%" stop-color="#0ea5e9" />
+                </linearGradient>
+                <linearGradient id="grad-warn" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ca8a04" />
+                  <stop offset="100%" stop-color="#eab308" />
+                </linearGradient>
+                <linearGradient id="grad-danger" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#b91c1c" />
+                  <stop offset="100%" stop-color="#ef4444" />
+                </linearGradient>
+              </defs>
+              
+              <!-- Clean Background Ring -->
+              <circle cx="100" cy="100" r="82" class="gauge-track-ring"></circle>
+              
+              <!-- Clean Progress Fill Ring -->
+              <circle cx="100" cy="100" r="82" class="gauge-fill-ring" id="svg-fill-ring" 
+                      stroke="url(#grad-safe)" 
+                      stroke-dasharray="515" 
+                      stroke-dashoffset="360"></circle>
+            </svg>
+
+            <!-- Minimalist center readout text -->
+            <div class="gauge-value-readout">
+              <span class="readout-title">Risk Index</span>
+              <span class="readout-number" id="risk-value">28%</span>
+              <span class="readout-status state-safe" id="risk-state-label">Stable</span>
+            </div>
+          </div>
+
+          <!-- Refined System message box -->
+          <div class="premium-alert-banner" id="warning-box">
+            <div class="banner-icon-wrapper" id="warning-banner-icon">✓</div>
+            <div class="banner-text-details">
+              <span class="title">Active Tracking Status</span>
+              <p class="desc" id="warning-box-text">All indicators safe. Driver attention looks good.</p>
+            </div>
+          </div>
+
+          <!-- Dynamic Physics Details -->
+          <div class="horizontal-telemetry-metrics">
+            <div class="physics-column">
+              <span class="lbl">G-Force</span>
+              <span class="val" id="val-gforce">1.04G</span>
+            </div>
+            <div class="physics-column divider-lines">
+              <span class="lbl">Brake Input</span>
+              <span class="val" id="val-braking">0.0%</span>
+            </div>
+            <div class="physics-column">
+              <span class="lbl">Steering Force</span>
+              <span class="val" id="val-steering">0.2 nm</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== RIGHT PANEL: STRESS & LOGS ==================== -->
+      <section class="panel-card telemetry-panel glass-card" id="panel-telemetry">
+        <div class="panel-header">
+          <div class="panel-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3>Voice Stress Tracker</h3>
+          <span class="panel-badge-status">Voice Level</span>
+        </div>
+
+        <div class="panel-body telemetry-layout-flex">
+          
+          <!-- Stress visual card -->
+          <div class="stress-voice-panel glass-card">
+            <div class="panel-top-row">
+              <span class="label">Vocal Stress Level</span>
+              <span class="val" id="stress-level-label">Stable (12%)</span>
+            </div>
+            <div class="wave-canvas-wrapper">
+              <canvas id="canvas-voice-wave"></canvas>
+            </div>
+          </div>
+
+          <!-- Behavior score card -->
+          <div class="score-pills-row">
+            <div class="score-card glass-card">
+              <span class="lbl">Drive Score</span>
+              <span class="val score-green" id="driver-score">98</span>
+              <span class="sub">Excellent stability</span>
+            </div>
+            <div class="score-card glass-card">
+              <span class="lbl">Lane Focus</span>
+              <span class="val score-cyan" id="lane-focus">96.8%</span>
+              <span class="sub">Centered tracking</span>
+            </div>
+          </div>
+
+          <!-- Clean high-end event logger -->
+          <div class="event-logs-panel glass-card">
+            <div class="logs-header-bar">
+              <span>Driver Action Logs</span>
+              <span class="active-dot-green">Online</span>
+            </div>
+            <div class="logs-scroller-area" id="scrolling-log">
+              <div class="log-row"><span class="time">[14:26:39]</span> Attention tracking active.</div>
+              <div class="log-row"><span class="time">[14:26:39]</span> Safety status initialized.</div>
+              <div class="log-row"><span class="time">[14:26:40]</span> Focus tracking starts now.</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==================== CHATBOT CO-PILOT ASSISTANT ==================== -->
+    <section class="cockpit-chat-section glass-card">
+      <div class="chat-header-bar">
+        <div class="left-group">
+          <div class="active-orb-core"></div>
+          <h4>AI Driver Intelligent Assistant</h4>
+        </div>
+        <span class="chat-status-text">Driver Chat Console</span>
+      </div>
+
+      <div class="chat-body-content">
+        <div class="chat-conversation-scroller" id="chat-messages">
+          <div class="chat-message-row ai">
+            <div class="sender-name">ADIS</div>
+            <div class="message-content">Safety system active. I am monitoring your attention to ensure a safe, smooth journey. How are you feeling as we begin?</div>
+          </div>
+        </div>
+
+        <form id="cockpit-chat-form" onsubmit="submitChat(event)">
+          <div class="chat-input-row">
+            <input type="text" id="chat-input" placeholder="Type a message or state how you feel (e.g. 'I am feeling focused' or 'I feel tired')..." autocomplete="off">
+            <button type="submit" class="btn-chat-send">
+              <span>Send Message</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== MINIMAL ANALYTICS TIMELINE ==================== -->
+    <section class="cockpit-analytics-section glass-card">
+      <div class="panel-header">
+        <div class="panel-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+        </div>
+        <h3>Driver Focus Timelines</h3>
+        <span class="panel-badge-status">Journey History</span>
+      </div>
+
+      <div class="analytics-charts-grid">
+        <div class="chart-box glass-card">
+          <div class="chart-header-details">
+            <span class="title">Drowsiness Level</span>
+            <span class="val" id="timeline-fatigue-value">12.4%</span>
+          </div>
+          <div class="chart-draw-area">
+            <canvas id="chart-fatigue"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-box glass-card">
+          <div class="chart-header-details">
+            <span class="title">Driver Stress</span>
+            <span class="val" id="timeline-stress-value">14.1%</span>
+          </div>
+          <div class="chart-draw-area">
+            <canvas id="chart-stress"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-box glass-card">
+          <div class="chart-header-details">
+            <span class="title">System Risk Level</span>
+            <span class="val" id="timeline-risk-value">28.0%</span>
+          </div>
+          <div class="chart-draw-area">
+            <canvas id="chart-risk"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==================== CRITICAL SAFETY PROTOCOL OVERLAY ==================== -->
+  <div id="emergency-overlay" class="emergency-hud-overlay hidden">
+    <div class="emergency-wrapper-card floating-card">
+      
+      <div class="threat-alert-banner">
+        <span class="banner-tag">Safety Override</span>
+        <h2>Warning: High Risk Detected</h2>
+        <p class="desc">Sensors suggest driver is too tired or distracted. Auto stop is ready.</p>
+      </div>
+
+      <div class="threat-details-readout">
+        <div class="readout-column">
+          <span class="lbl">Biometric Alarm</span>
+          <span class="val text-danger">Heavy Fatigue Detected</span>
+        </div>
+        <div class="readout-column">
+          <span class="lbl">Car Speed</span>
+          <span class="val text-danger" id="em-speed">72 mph</span>
+        </div>
+        <div class="readout-column">
+          <span class="lbl">Autonomous Safety</span>
+          <span class="val text-danger">Auto Stop Ready</span>
+        </div>
+      </div>
+
+      <div class="sos-actions-grid">
+        <button class="sos-card glass-card call-active" onclick="triggerEmergencyAction('emergency_call')">
+          <span class="icon">📞</span>
+          <h4>Call Emergency (SOS)</h4>
+          <p>Call emergency dispatch right now.</p>
+        </button>
+
+        <button class="sos-card glass-card location-active" onclick="triggerEmergencyAction('location')">
+          <span class="icon">📍</span>
+          <h4>Share GPS Location</h4>
+          <p>Send live location details to safety units.</p>
+        </button>
+
+        <button class="sos-card glass-card family-active" onclick="triggerEmergencyAction('notify_family')">
+          <span class="icon">👥</span>
+          <h4>Alert Your Family</h4>
+          <p>Send quick text warnings to family numbers.</p>
+        </button>
+      </div>
+
+      <!-- Massive elegant Emergency Pullover button -->
+      <div class="pullover-action-box">
+        <button class="btn-pullover pulse-pullover-glow" onclick="triggerEmergencyAction('emergency_stop')">
+          <span class="btn-text">Auto Stop Car</span>
+          <span class="btn-sub">Slow down and stop safely</span>
+        </button>
+      </div>
+
+      <div class="overlay-dismiss-row">
+        <button class="btn-dismiss-override" onclick="resetEmergencyMode()">
+          Dismiss override & reset sensors
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
