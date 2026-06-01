@@ -1,0 +1,6 @@
+envi/
+__pycache__/
+*.pyc
+*.docx
+.vscode/
+.DS_Store

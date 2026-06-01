@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pre-Drive Mood Check</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 500px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 90%;
+            height: 130px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            resize: none;
+            font-size: 14px;
+            outline: none;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 10px 20px;
+            border: none;
+            background: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2>🧠 Pre-Drive Mood Check</h2>
+
+        <form method="POST" action="/predict-mood">
+            <textarea name="user_text" placeholder="How are you feeling before driving?"></textarea>
+            <br>
+            <button type="submit">Predict Mood</button>
+        </form>
+
+        {% if mood %}
+            <div class="result">
+                Predicted Mood: {{ mood }}
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
