@@ -12,7 +12,6 @@
         font-family: "Segoe UI", Arial, sans-serif;
     }
 
-    /* 🌤 LIGHT REALISTIC ROAD BACKGROUND */
     body {
         min-height: 100vh;
         display: flex;
@@ -29,7 +28,6 @@
         background-attachment: fixed;
     }
 
-    /* MAIN APP CARD */
     .app {
         width: 100%;
         max-width: 1100px;
@@ -41,7 +39,6 @@
         backdrop-filter: blur(6px);
     }
 
-    /* HEADER */
     .header {
         text-align: center;
         margin-bottom: 20px;
@@ -58,7 +55,6 @@
         margin-top: 4px;
     }
 
-    /* TOP BAR */
     .top {
         display: flex;
         gap: 10px;
@@ -80,14 +76,12 @@
         color: white;
         border-radius: 10px;
         cursor: pointer;
-        font-weight: 500;
     }
 
     button:hover {
         background: #1d4ed8;
     }
 
-    /* RISK BOX */
     .risk-box {
         background: #f9fafb;
         padding: 18px;
@@ -112,13 +106,13 @@
 
     .fill {
         height: 100%;
-        width: {% if risk %}{{ risk }}%{% else %}0%{% endif %};
+        width: {% if risk is not none %}{{ risk }}%{% else %}0%{% endif %};
         transition: 0.5s ease;
 
         background:
-        {% if risk and risk > 70 %}
+        {% if risk is not none and risk > 70 %}
             #ef4444
-        {% elif risk and risk > 30 %}
+        {% elif risk is not none and risk > 30 %}
             #f59e0b
         {% else %}
             #22c55e
@@ -132,7 +126,6 @@
         color: #111827;
     }
 
-    /* VIDEO GRID */
     .grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -166,7 +159,6 @@
         margin-top: 10px;
     }
 
-    /* MOBILE */
     @media(max-width:800px){
         .grid {
             grid-template-columns: 1fr;
@@ -184,19 +176,16 @@
 
 <div class="app">
 
-    <!-- HEADER -->
     <div class="header">
         <h1>Driver Safety AI System</h1>
         <p>Real-time Driver Drowsiness Detection and Risk Analysis</p>
     </div>
 
-    <!-- UPLOAD -->
     <form class="top" action="/predict" method="POST" enctype="multipart/form-data">
         <input type="file" name="video" required>
         <button type="submit">Analyze</button>
     </form>
 
-    <!-- RISK -->
     <div class="risk-box">
 
         <div class="label">Driver Risk Level</div>
@@ -206,7 +195,7 @@
         </div>
 
         <div class="status">
-            {% if risk %}
+            {% if risk is not none %}
                 Risk Score: {{ risk }}
             {% else %}
                 Waiting for video analysis...
@@ -214,7 +203,7 @@
         </div>
 
         <div class="status">
-            {% if risk %}
+            {% if risk is not none %}
                 {% if risk > 70 %}
                     Status: High Risk Detected
                 {% elif risk > 30 %}
@@ -227,10 +216,9 @@
 
     </div>
 
-    <!-- VIDEOS -->
-    <div class="grid" style="margin: 0 auto; text-align: center; width: 500px;">
-        <!-- INPUT -->
-        <div class="card" style="margin: 0 auto; text-align: center; width: 500px;">
+    <div class="grid">
+
+        <div class="card">
             <h3>Input Video</h3>
 
             {% if input_video %}
@@ -238,9 +226,7 @@
                     <source src="{{ input_video }}">
                 </video>
             {% else %}
-                <div class="empty">
-                    Upload a video to preview input feed
-                </div>
+                <div class="empty">Upload a video to preview input feed</div>
             {% endif %}
         </div>
 

@@ -12,13 +12,28 @@ OUTPUT_FOLDER = "static/output"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# Load YOLO model once (important for speed)
 model = YOLO("models/best.pt")
+
+# risky behavior classes (EDIT based on your model labels)
+RISKY_CLASSES = [
+    "drowsy",
+    "sleep",
+    "yawn",
+    "phone",
+    "no_seatbelt",
+    "fatigue"
+]
 
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    return render_template(
+        "index.html",
+        risk=None,
+        status=None,
+        input_video=None,
+        video=None
+    )
 
 
 @app.route("/predict", methods=["POST"])
@@ -49,8 +64,8 @@ def predict():
     out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
 
     frame_count = 0
-    total_conf = 0
-    detect_count = 0
+    risk_score = 0
+    max_risk_per_frame = 20
 
     while True:
         ret, frame = cap.read()
@@ -59,10 +74,10 @@ def predict():
 
         frame_count += 1
 
-        # -----------------------------
-        # YOLO INFERENCE
-        # -----------------------------
         results = model(frame, verbose=False)
+
+        frame_risk = 0
+        detected_labels = []
 
         for r in results:
             boxes = r.boxes
@@ -73,10 +88,10 @@ def predict():
                 cls = int(box.cls[0])
 
                 label = model.names[cls]
+                detected_labels.append(label)
 
                 # draw box
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
                 cv2.putText(
                     frame,
                     f"{label} {conf:.2f}",
@@ -87,10 +102,13 @@ def predict():
                     2
                 )
 
-                detect_count += 1
-                total_conf += conf
+                # risk logic (BASED ON CLASS)
+                if label.lower() in RISKY_CLASSES:
+                    frame_risk += 20
 
-        # overlay status
+        risk_score += min(frame_risk, max_risk_per_frame)
+
+        # overlay title
         cv2.putText(
             frame,
             "Driver Monitoring AI",
@@ -107,26 +125,23 @@ def predict():
     out.release()
     cv2.destroyAllWindows()
 
-    # -----------------------------
-    # RISK CALCULATION (simple logic)
-    # -----------------------------
-    if detect_count > 0:
-        avg_conf = total_conf / detect_count
+    # FINAL RISK
+    risk = min(100, risk_score)
+
+    if risk >= 60:
+        status = "High Risk Detected"
+    elif risk >= 30:
+        status = "Medium Risk"
     else:
-        avg_conf = 0
+        status = "Normal"
 
-    risk = min(100, int(avg_conf * 100 + 20))
+    insight = "YOLO model analyzed driver behavior and detected risk based on driver activity patterns."
 
-    insight = "YOLO model analyzed driver behavior and detected possible fatigue indicators."
-
-    # -----------------------------
-    # FIXED FLASK URLS (IMPORTANT)
-    # -----------------------------
     input_url = url_for('static', filename='uploads/' + input_filename)
     output_url = url_for('static', filename='output/' + output_filename)
 
-    print("INPUT:", input_url)
-    print("OUTPUT:", output_url)
+    print("RISK:", risk)
+    print("STATUS:", status)
     print("FILE EXISTS:", os.path.exists(output_path))
 
     return render_template(
@@ -134,6 +149,7 @@ def predict():
         input_video=input_url,
         video=output_url,
         risk=risk,
+        status=status,
         insight=insight
     )
 
