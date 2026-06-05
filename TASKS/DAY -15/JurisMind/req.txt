@@ -1,0 +1,8 @@
+pypdf
+sentence-transformers
+faiss-cpu
+google-generativeai
+numpy
+langchain
+langchain-community
+flask
